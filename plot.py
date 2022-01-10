@@ -92,9 +92,6 @@ for for_data in datasets:
                         data['dataset'] == for_data) & (data['experiment'] == experiment)].iterrows():
                     fpr = row['fpr']
                     tpr = row['tpr']
-                    if for_model in ["resnet_lstm"]:
-                        fpr = gaussian_filter1d(fpr, sigma=10)
-                        tpr = gaussian_filter1d(tpr, sigma=10)
                     score = row['score']
                     plt.plot(fpr, tpr, label=f"{display_name}-{score}")
                     plt.xlabel("True Positive Rate")
