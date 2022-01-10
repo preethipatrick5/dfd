@@ -8,6 +8,27 @@ import matplotlib.pyplot as plt
 root = "/home/ram/Downloads/results"
 
 
+model_map = {
+    "resnet": "res",
+    "xception": "xcptn",
+    "resnet3": "res3d",
+    "resnet_lstm": "reslstm"
+}
+
+experiment_map = {
+    "padding": "pad",
+    "gaussian_blur": "gaus_blur",
+    "gaussian_noise": "gaus_noise",
+    "random_noise": "rand_noise",
+    "baseline": "baseline",
+    "shuffle_pixels": "shuf_pixel",
+    "saturation": "sat",
+    "perspective_transform": "pers_trans",
+    "random_augmentation": "mixed_aug",
+    "pixelization": "pixel"
+}
+
+
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
@@ -57,7 +78,7 @@ print(data.head())
 for for_data in datasets:
     for for_training in trainings:
         for experiment in os.listdir(os.path.join(root, for_data, "noise", "resnet")):
-            plt.figure(figsize=(16, 12), dpi=80)
+            plt.figure(figsize=(6, 4))
             experiment_name = "mixed_augmentation" if experiment == "random_augmentation" else experiment
             for for_model in models:
                 display_name = ""
@@ -71,11 +92,10 @@ for for_data in datasets:
                         data['dataset'] == for_data) & (data['experiment'] == experiment)].iterrows():
                     fpr = row['fpr']
                     tpr = row['tpr']
-                    if for_model in ["resnet_lstm"]:
-                        fpr = gaussian_filter1d(fpr, sigma=10)
-                        tpr = gaussian_filter1d(tpr, sigma=10)
                     score = row['score']
                     plt.plot(fpr, tpr, label=f"{display_name}-{score}")
+                    plt.xlabel("True Positive Rate")
+                    plt.ylabel("False Positive Rate")
                     plt.legend(loc=4)
             plt.savefig(f"graphs/roc_{for_data}_{for_training}_{experiment_name}.png")
     plt.close()
