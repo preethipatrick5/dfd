@@ -33,3 +33,5 @@ To train the model on FF++ dataset
 ```shell
 bash eval_all.sh ff $path_to_dataset_folder $num_epochs $is_dev_run $train_for
 ```
+
+This will create a results folder and store all the y values and y_predicted values as a pickle file, this can then be used by the plot.py script to generate Accuracy scores, AUC scores, ROC curves and confusion matrices.  
